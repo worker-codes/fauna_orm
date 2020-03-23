@@ -1,13 +1,24 @@
 {
-  "name": "fauna_orm",
-  "version": "1.0.0",
+  "name": "faunadb_orm",
+  "description": "An NoSQL-friendly ORM for Fauna Database",
+  "version": "0.0.3",
   "main": "./src/index.js",
   "license": "MIT",
+  "author": "Dandre Allen <dandre@graphflo.com>",
+  "keywords": [
+    "database",
+    "fauna",
+    "faunadb",
+    "orm",
+    "fauna orm"
+  ],
+  "homepage": "https://github.com/graphflo/fauna_orm",
+  "repository": "graphflo/fauna_orm",
   "scripts": {
     "test": "jest --coverage"
   },
   "dependencies": {
-    "faunadb": "^2.11.1",
+    "faunadb": "^2.13.0",
     "lodash": "^4.17.15",
     "simpleflakes": "^2.1.0"
   },
