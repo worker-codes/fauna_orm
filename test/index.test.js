@@ -33,7 +33,7 @@ describe('FaunaDB Index', () => {
         expect(fauna_query).toEqual(query.query)
     });
 
-    test('create index with terms with ref ts ', () => {
+    test('create index with terms, ref and ts', () => {
         let fauna_query = q.CreateIndex({
             name: 'mike',
             source: q.Class('collection'),
