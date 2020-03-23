@@ -12,14 +12,14 @@
 - Using Faker.js and Chance.js
 
 
-####Install Fauna ORM
+#### Install Fauna ORM
 
 ```
 npm install fauna_orm
 yarn add fauna_orm
 ```
 
-####How to use Fauna ORM
+#### How to use Fauna ORM
 
 ```javascript
 const faunaORM = require('fauna_orm ');
@@ -27,7 +27,7 @@ let orm = new faunaORM(schema, 'secret');
 
 ```
 
-####Schema
+#### Schema
 
 ```javascript
 let schema = {
@@ -382,7 +382,7 @@ let schema = {
 
 ```
 
-####Query
+#### Query
 
 ```javascript
 //Simple equal satement single parameter, return ref
@@ -521,7 +521,7 @@ let insert = orm2
 ```
 
 
-####Database
+#### Database
 
 ```javascript
 //create database
@@ -555,7 +555,7 @@ let query = orm.database("DATABASE_NAME")
 	.run();
 ```
 
-####Key
+#### Key
 
 ```javascript
 //create key
@@ -579,7 +579,7 @@ let query = orm.key("KEY_ID")
 	.run();
 ```
 
-####Collection
+#### Collection
 
 ```javascript
 //create collection
@@ -608,7 +608,7 @@ let query = orm.collection("COLLECTION_NAME")
 	.run();
 ```
 
-####Document
+#### Document
 
 ```javascript
 //create document
@@ -658,7 +658,7 @@ let query = orm.collection("COLLECTION_NAME")
 	.run();
 ```
 
-####Index
+#### Index
 
 ```javascript
 //create index
@@ -710,5 +710,5 @@ let query = orm.index("INDEX_NAME")
 	.run();
 ```
 
-###Acknowledgements & Thanks
+### Acknowledgements & Thanks
 - faunadb
