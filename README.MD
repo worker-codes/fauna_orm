@@ -35,9 +35,9 @@ let schema = {
 		indexes: {
 			email: {
 				indexes: {
-					find: '~findByemail',
-					range: null,
-					rangeAll: null,
+                find: '~findByemail',
+                range: null,
+                rangeAll: null,
 				},
 			},
 			age: {
@@ -529,7 +529,12 @@ let query = orm.database('DATABASE_NAME')
 	.create()
 	.run();
 
-//list all database
+//list all databases Refs
+let query = orm.database()
+	.allRef()
+	.run();
+
+//list all database document
 let query = orm.database()
 	.all()
 	.run();
@@ -563,19 +568,29 @@ let query = orm.key()
 	.create("DATABASE_NAME", "ROLE_NAME", "KEY_NAME", "KEY_DATA")
 	.run();
 
-//list all key
+//list all key Refs
+let query = orm.key()
+	.allRef()
+	.run();
+
+//list all key documents
 let query = orm.key()
 	.all()
 	.run();
 
+//get key from secret
+let query = orm.key()
+	.keyFromSecret("SECRET")
+	.run();
+
 //get single key
-let query = orm.key("KEY_ID")
-	.get()
+let query = orm.key()
+	.get("KEY_ID")
 	.run();
 
 //delete key
-let query = orm.key("KEY_ID")
-	.delete()
+let query = orm.key()
+	.delete("KEY_ID")
 	.run();
 ```
 
@@ -584,12 +599,33 @@ let query = orm.key("KEY_ID")
 ```javascript
 //create collection
 let query = orm.collection('COLLECTION_NAME')
-	.create()
+	.create({
+		ttl_days: ttl_days,
+		history_days: history_days,
+		data: data,
+		permissions: permissions
+	})
 	.run();
 
-//list all collection
+//update collection
+let query = orm.collection('COLLECTION_NAME')
+	.update({
+		name: name,
+		ttl_days: ttl_days,
+		history_days: history_days,
+		data: data,
+		permissions: permissions
+	})
+	.run();
+
+//list all collection Refs
 let query = orm.collection()
 	.all()
+	.run();
+
+//list all collection Documents
+let query = orm.collection()
+	.allRef()
 	.run();
 
 //get single collection
@@ -606,6 +642,26 @@ let query = orm.collection("OLD_COLLECTION_NAME")
 let query = orm.collection("COLLECTION_NAME")
 	.delete()
 	.run();
+
+//add annotate collection
+let query = orm.database("COLLECTION_NAME")
+	.annotate({key:"value"})
+	.run();
+
+//change collection ttl
+let query = orm.collection("COLLECTION_NAME")
+	.setTTL("DAYS")
+	.run();
+
+// Change collection history
+let query = orm.collection("COLLECTION_NAME")
+	.setHistory("DAYS")
+	.run();
+
+// Change collection permissions
+let query = orm.collection("COLLECTION_NAME")
+	.setPermissions("PERMISSIONS")
+	.run();
 ```
 
 #### Document
@@ -618,7 +674,8 @@ let query = orm.collection("COLLECTION_NAME")
 
 //create document with id
 let query = orm.collection("COLLECTION_NAME")
-	.document.create({id:"DOCUMENT_ID", foo:"bar" })
+	.document
+	.create({id:"DOCUMENT_ID", foo:"bar" })
 	.run();
 
 //create many document
@@ -654,59 +711,49 @@ let query = orm.collection("COLLECTION_NAME")
 //delete document
 let query = orm.collection("COLLECTION_NAME")
 	.document.
-	delete()
+	delete("DOCUMENT_ID")
 	.run();
 ```
 
 #### Index
 
 ```javascript
-//create index
+// create index
 let query = orm.index('INDEX_NAME')
-	.create("COLLECTION_NAME")
+	.create("COLLECTION_NAME",  {
+		terms:["email", "name", "address.city", "ref", "ts"],
+		values:["email", "name", "address.city", "ref", "ts"],
+		unique: false,
+		serialized: false
+	})
 	.run();
 
-//create index with terms
-let query = orm.index('INDEX_NAME')
-	.create("COLLECTION_NAME", ["email", "name", "address.city"])
-	.run();
+// list all index douments
+let query = orm.index().all().run();
 
-//create index with terms, ref and ts
-let query = orm.index('INDEX_NAME')
-	.create("COLLECTION_NAME", ["email", "ref", "ts"])
-	.run();
+// list all index Refs
+let query = orm.index().allRef().run();
 
-//create index with values
-let query = orm.index('INDEX_NAME')
-	.create("COLLECTION_NAME",  null, ["email", "name", "address.city"])
-	.run();
-
-//create index with values, ref, ts
-let query = orm.index('INDEX_NAME')
-	.create("COLLECTION_NAME",  null, ["email", "ref", "ts"])
-	.run();
-
-//create unique index
-let query = orm.index('INDEX_NAME')
-	.create('collection', "email", null , true)
-	.run();
-
-//list all collection
-let query = orm.index().all()).run();
-
-//get single collection
+// get single index
 let query = orm.index("INDEX_NAME")
 	.get()
 	.run();
 
-//rename single collection
+// rename single index
 let query = orm.index("INDEX_NAME")
-	.renameTo('INDEX_NAME')
+	.renameTo('OLD_INDEX_NAME')
 	.run();
 
-//delete collection
+// delete index
 let query = orm.index("INDEX_NAME")
 	.delete()
+	.run();
+	
+// delete index
+let query = orm.index("INDEX_NAME")
+	.annotate({
+		foo:"bar"
+	})
 	.run();
 ```
 
