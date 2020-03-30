@@ -1,6 +1,6 @@
 # An ORM for Fauna Database
 [![GitHub stars](https://img.shields.io/github/stars/graphflo/fauna_orm)](https://github.com/graphflo/fauna_orm/stargazers) [![GitHub forks](https://img.shields.io/github/forks/graphflo/fauna_orm)](https://github.com/graphflo/fauna_orm/network) [![GitHub issues](https://img.shields.io/github/issues/graphflo/fauna_orm)](https://github.com/graphflo/fauna_orm/issues) [![GitHub license](https://img.shields.io/github/license/graphflo/fauna_orm)](https://github.com/graphflo/fauna_orm)
-### *****In Development Expect Breaking Changes******
+### In Development Expect Breaking Changes
 ## Features
 
 - Use Fauna database without FQL.
@@ -390,11 +390,9 @@ let query = orm.collection('COLLECTION_NAME')
   .where(filter)
   .run();
 ``
-`
 
 #### Nested Insert
 
-`
 ``
 javascript
 let insertDocument = {
