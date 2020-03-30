@@ -20,11 +20,9 @@ class Where {
 	}
 	viewBy(view) {
 		let viewIndex = this.main.schema[this.query.collection].views[view].index;
-		// console.log( this.main.schema[this.query.collection].views[view].columns.length );
-
 		this.viewRefPosition = this.main.schema[this.query.collection].views[view].columns;
-
-		this.query['viewBy'] = viewIndex;
+        this.query['viewBy'] = viewIndex;
+        
 		return this;
 	}
 	limit(size) {

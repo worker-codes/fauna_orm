@@ -12,8 +12,8 @@ class faunaORM {
         return database(this, name);
     }
 
-    key(name) {
-        return key(this, name);
+    key() {
+        return key(this, null);
     }
 
     collection(name) {

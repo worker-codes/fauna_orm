@@ -468,7 +468,12 @@ let query = orm.database('DATABASE_NAME')
   .create()
   .run();
 
-//list all database
+//list all databases Refs
+let query = orm.database()
+	.allRef()
+	.run();
+
+//list all database document
 let query = orm.database()
   .all()
   .run();
@@ -504,10 +509,20 @@ let query = orm.key()
   .create("DATABASE_NAME", "ROLE_NAME", "KEY_NAME", "KEY_DATA")
   .run();
 
-//list all key
+//list all key Refs
+let query = orm.key()
+	.allRef()
+	.run();
+
+//list all key documents
 let query = orm.key()
   .all()
   .run();
+
+//get key from secret
+let query = orm.key()
+	.keyFromSecret("SECRET")
+	.run();
 
 //get single key
 let query = orm.key("KEY_ID")
@@ -528,10 +543,26 @@ let query = orm.collection('COLLECTION_NAME')
   .create()
   .run();
 
-//list all collection
+//update collection
+let query = orm.collection('COLLECTION_NAME')
+	.update({
+		name: name,
+		ttl_days: ttl_days,
+		history_days: history_days,
+		data: data,
+		permissions: permissions
+	})
+	.run();
+
+//list all collection Refs
 let query = orm.collection()
   .all()
   .run();
+
+//list all collection Documents
+let query = orm.collection()
+	.allRef()
+	.run();
 
 //get single collection
 let query = orm.collection("COLLECTION_NAME")
@@ -615,7 +646,7 @@ delete()
 #### Index
 
 ```javascript
-//create index
+// create index
 let query = orm.index('INDEX_NAME')
   .create("COLLECTION_NAME")
   .run();
@@ -653,12 +684,12 @@ let query = orm.index("INDEX_NAME")
   .get()
   .run();
 
-//rename single collection
+// rename single index
 let query = orm.index("INDEX_NAME")
   .renameTo('INDEX_NAME')
   .run();
 
-//delete collection
+// delete index
 let query = orm.index("INDEX_NAME")
   .delete()
   .run();
