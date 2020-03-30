@@ -3,7 +3,7 @@ const q = faunadb.query;
 const document = require('./document');
 const Where = require('../where');
 const Insert = require('../insert');
-// const index = require('../classes/index_collection');
+const index = require('../classes/index_collection');
 
 function ParseCollection(collection){
     return q.Do(
@@ -61,18 +61,18 @@ module.exports = (main, name) => {
 			return main;
         },
 
-        // update(options) {
-        //     const config = {               
-        //         name: (options.name) ? options.name : null,
-        //         ttl_days: (options.ttl_days) ? options.ttl_days : null,
-        //         history_days: (options.history_days) ? options.history_days : null,
-        //         data: (options.data) ? options.data : null,
-        //         permissions: (options.permissions) ? options.permissions : null,
-        //     };
+        update(options) {
+            const config = {               
+                name: (options.name) ? options.name : null,
+                ttl_days: (options.ttl_days) ? options.ttl_days : null,
+                history_days: (options.history_days) ? options.history_days : null,
+                data: (options.data) ? options.data : null,
+                permissions: (options.permissions) ? options.permissions : null,
+            };
 
-		// 	main.query = ParseCollection(q.Update(q.Collection(name), { ...config }));
-		// 	return main;
-        // },
+			main.query = ParseCollection(q.Update(q.Collection(name), { ...config }));
+			return main;
+        },
 
 		renameTo(newName) {
 			main.query = ParseCollection(q.Update(q.Collection(name), { name: newName }));
@@ -100,7 +100,7 @@ module.exports = (main, name) => {
 		},
         document: document(main, name),
         
-		// index: index(main, name),
+		index: index(main, name),
 
 		where(filter) {
 			return new Where(main, name, filter);
