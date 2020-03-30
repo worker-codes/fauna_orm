@@ -1,72 +1,83 @@
 const faunadb = require('faunadb');
 const q = faunadb.query;
+const { genTermObj, genValueObj } = require('../utils');
 
-function genTermObj(terms) {
-    // terms is an array of names
-    if (typeof terms == 'string') return [{ field: ['data', terms] }];
-    // we have an array
-    const termsObj = [];
-    for (let i = 0; i < terms.length; i++) {
-        if (terms[i] === 'ts') {
-            termsObj.push({ field: ['ts'] })
-        } else if (terms[i] === 'ref') {
-            termsObj.push({ field: ['ref'] })
-        } else {
-            termsObj.push({ field: ['data', `${terms[i]}`] });
-        }
-    }
-    return termsObj;
+function ParseIndex(index){
+    return q.Do(
+        q.Let(
+            {
+                "index": index,
+                "source":q.Select("source", q.Var("index")),
+                "collection":q.Get(q.Var("source")),
+                "_id":q.Select("id",q.Select("ref", q.Var("index"))),
+            },
+            q.Merge(                                            
+                {
+                    collection: q.Select("name", q.Var("collection")),
+                    _id: q.Var("_id"),
+                },
+                [
+                    q.Var("index"),                
+                ]
+            )                      
+        )
+    )
 }
-function genValueObj(values) {
-    // terms is an array of names
-    const valueObj = [];
-    
-    for (let i = 0; i < values.length; i++) {
-        if (values[i] === 'ts') {
-            valueObj.push({ field: ['ts'] })
-        } else if (values[i] === 'ref') {
-            valueObj.push({ field: ['ref'] })
-        } else {
-            valueObj.push({ field: ['data', `${values[i]}`] });
-        }
-    }
-
-    return valueObj;
-}
-
 module.exports =(main, name)=> {
     return {
-        create(collection, terms, values, unique = false) {
+        create(collection, options) {
             const config = {
                 name,
-                source: q.Class(collection),
-                unique,
+                source: q.Collection(collection),
+                unique: (options.unique)? options.unique : false,
+                serialized: (options.serialized)? options.serialized : false,
+                data: (options.data)? options.data : null,
             };
     
-            if (terms) config.terms = genTermObj(terms);
-            if (values) config.values = genValueObj(values);
+            if (config.terms) config.terms = genTermObj(terms);
+            if (config.values) config.values = genValueObj(values);
     
-            main.query = q.CreateIndex(config);
+            main.query = ParseIndex(q.CreateIndex(config));
+            return main;
+        },
+
+        update(name, options={}) {
+            main.query = ParseIndex(q.Update(q.Index(name), options));
             return main;
         },
     
+        allRef() {           
+            main.query = q.Paginate(q.Indexes(), { size:10000 });
+            return main;
+        },
+
         all() {           
-            main.query = q.Paginate(q.Indexes());
+            main.query = q.Map(
+                q.Paginate(q.Indexes(), { size: 10000 }),
+                q.Lambda("indexRef",
+                    ParseIndex(q.Get(q.Var("indexRef")))                    
+                )
+            );
             return main;
         },
     
         get() {
-            main.query = q.Get(q.Index(name));
+            main.query = ParseIndex(q.Get(q.Index(name)))            
             return main;
         },
     
         renameTo(newName) {
-            main.query = q.Update(q.Index(name), { name: newName });
+            main.query = ParseIndex(q.Update(q.Index(name), { name: newName }));
             return main;
         },
     
         delete() {
-            main.query = q.Delete(q.Index(name));
+            main.query = ParseIndex(q.Delete(q.Index(name)));            
+            return main;
+        },
+
+        annotate(data) {
+            main.query = q.Update(q.Database(name), { data });
             return main;
         }
     }

@@ -4,8 +4,8 @@ const q = faunadb.query;
 
 module.exports =(main, name)=> {
     return {
-        create() {
-            main.query = q.CreateDatabase({ name });
+        create(data= null) {
+            main.query = q.CreateDatabase({ name, data});
             return main;
         },
         
@@ -15,7 +15,15 @@ module.exports =(main, name)=> {
         },
         
         all() {
-            main.query = q.Paginate(q.Databases());
+            main.query = q.Map(
+                q.Paginate(q.Databases(), { size:10000 }),
+                q.Lambda("databaseRef", q.Get(q.Var("databaseRef")))
+            )
+            return main;
+        },
+
+        allRefs() {
+            main.query = q.Paginate(q.Databases(), { size:10000 });
             return main;
         },
         

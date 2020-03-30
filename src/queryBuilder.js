@@ -3,12 +3,12 @@ const q = faunadb.query;
 
 function queryBuilder(collection, schema, statement) {
 	function getIndex(key) {
-		return schema.indexes[key].indexes.find;
+		return schema.fields[key].indexes.find;
 	}
 	function getRangeIndex(key) {
 		return {
-			range: schema.indexes[key].indexes.range,
-			rangeAll: schema.indexes[key].indexes.rangeAll,
+			range: schema.fields[key].indexes.range,
+			rangeAll: schema.fields[key].indexes.rangeAll,
 		};
 	}
 	const ops = {

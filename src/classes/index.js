@@ -4,4 +4,5 @@ module.exports = {
     document : require('./document'),
     key : require('./key'),
     indexes : require('./indexes'),
+    transform : require('./transform'),
 }

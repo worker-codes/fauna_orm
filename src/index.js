@@ -1,5 +1,5 @@
 const faunadb = require('faunadb');
-const { database, collection, document, key, indexes } = require('./classes');
+const { database, collection, document, key, indexes, transform } = require('./classes');
 
 class faunaORM {
     constructor(schema, secret) {
@@ -22,6 +22,10 @@ class faunaORM {
 
     index(name) {
         return indexes(this, name);
+    }
+
+    transform() {
+        return transform(this);
     }
 
    async run() {
