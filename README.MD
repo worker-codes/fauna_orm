@@ -389,12 +389,11 @@ let query = orm.collection('COLLECTION_NAME')
 let query = orm.collection('COLLECTION_NAME')
   .where(filter)
   .run();
-``
+```
 
 #### Nested Insert
 
-``
-javascript
+```javascript
 let insertDocument = {
   firstname: 'Santino',
   lastname: 'Ortiz',
