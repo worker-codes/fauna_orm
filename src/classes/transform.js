@@ -115,7 +115,7 @@ module.exports = async function transform(main) {
 
     let indexes =[]
     
-    let currentDatabase = await  this.client.query(
+    let currentDatabase = await  main.client.query(
         q.Let(
             {
                 collections: getAllCollections(),
@@ -187,7 +187,7 @@ module.exports = async function transform(main) {
 
     try {
         if (collections.length > 0) {
-            let createdCollections = await  this.client.query(createCollections(collections))
+            let createdCollections = await  main.client.query(createCollections(collections))
         console.log("Collection created " + collections);
         } else {
             console.log("No collection created");
@@ -202,7 +202,7 @@ module.exports = async function transform(main) {
 
     try {
         if (indexes.length > 0) {
-            let createdIndexes = await  this.client.query(q.Do(...indexes))
+            let createdIndexes = await  main.client.query(q.Do(...indexes))
             console.log("Indexes created " + allIndexes);
         }else{
             console.log("No indexes created");

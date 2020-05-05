@@ -53,7 +53,11 @@ function queryBuilder(collection, schema, statement) {
 		},
 
 		$and: (field, value) => {
-			return q.Intersection(...compileFilter(value));
+            // if (value.length >0) {
+            //     return q.Intersection(...compileFilter(value));
+            // }
+            // return []
+            return q.Intersection(...compileFilter(value));
 		},
 		$or: (field, value) => {
 			return q.Union(...compileFilter(value));

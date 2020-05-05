@@ -1,8 +1,12 @@
 const faunadb = require('faunadb');
 const q = faunadb.query;
 const document = require('./document');
-const Where = require('../where');
+const FindMany = require('../findMany');
 const Insert = require('../insert');
+const Delete = require('../Delete');
+const DeleteMany = require('../DeleteMany');
+const UpdateMany = require('../UpdateMany');
+const Count = require('../count');
 const index = require('../classes/index_collection');
 
 function ParseCollection(collection){
@@ -61,7 +65,7 @@ module.exports = (main, name) => {
 			return main;
         },
 
-        update(options) {
+        change(options) {
             const config = {               
                 name: (options.name) ? options.name : null,
                 ttl_days: (options.ttl_days) ? options.ttl_days : null,
@@ -100,18 +104,38 @@ module.exports = (main, name) => {
 		},
         document: document(main, name),
         
-		index: index(main, name),
-
-		where(filter) {
-			return new Where(main, name, filter);
-		},
-		insert(query) {
-			main.query = new Insert(main, name, query);
-			return main;
-		},
-		update(query) {
-			main.query = new Insert(main, name, query, true);
-			return main;
-		},
+        index: index(main, name),
+        query:{
+            findOne(filter) {
+                return new FindMany(main, name, filter);
+            },
+            findMany(filter) {
+                return new FindMany(main, name, filter);
+            },
+            create(query) {
+                main.query = new Insert(main, name, query);
+                return main;
+            },
+            update(query) {
+                main.query = new Insert(main, name, query, true);
+                return main;
+            },
+            upsert(query) {
+                main.query = new Insert(main, name, query, true);
+                return main;
+            },
+            delete(query) {//
+                return new Delete(main, name, query, true);
+            },
+            updateMany(query) {//
+                return new UpdateMany(main, name, query, true);
+            },
+            deleteMany(query) {//
+                return new DeleteMany(main, name, query);
+            },
+            count(filter) {//
+                return new Count(main, name, filter);
+            },
+        }		
 	};
 };
